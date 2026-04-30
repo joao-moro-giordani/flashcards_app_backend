@@ -32,6 +32,7 @@ return new class extends Migration
             $table->string('raw_translation');
             // $table->string('normalized_content');
             // $table->string('normalized_translation');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -14,9 +14,5 @@ class Flashcard extends Model
         'translation_lang_id',
         'raw_content',
         'raw_translation',
-        'normalized_content',
-        'normalized_translation',
-        'type',
-        'gender'
     ];
 }
