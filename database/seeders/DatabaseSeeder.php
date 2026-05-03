@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             LanguageSeeder::class,
+            FolderSeeder::class,
             DeckSeeder::class,
             FlashcardSeeder::class,
         ]);

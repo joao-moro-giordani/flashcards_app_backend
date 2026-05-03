@@ -20,21 +20,22 @@ class DeckRequest extends FormRequest
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
-    public function rules(): array  
+    public function rules(): array
     {
-        $deck = $this->route('deck');
-
         return [
             'name' => [
                 'required',
                 'string',
                 'max:100',
-
             ],
             'color' => [
                 'nullable',
                 'string',
-                'max:20', // e.g. hex "#FF5733" or "blue"
+                'max:20',
+            ],
+            'folder_id' => [
+                'required',
+                'exists:folders,id',
             ],
         ];
     }

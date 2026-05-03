@@ -5,22 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Deck extends Model
+class Folder extends Model
 {
     use SoftDeletes;
     protected $fillable = [
         'name',
         'color',
-        'folder_id',
     ];
 
-    public function flashcards() 
+    public function decks()
     {
-        return $this->hasMany(Flashcard::class);
-    }
-
-    public function folder()
-    {
-        return $this->belongsTo(Folder::class);
+        return $this->hasMany(Deck::class);
     }
 }
