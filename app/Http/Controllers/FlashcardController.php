@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Http\Request;
 use App\Models\Flashcard;
 use App\Http\Requests\FlashcardRequest;
 
@@ -10,11 +10,17 @@ class FlashcardController extends Controller
     /**
      * GET /flashcards
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Flashcard::all(), 200);
+        return Flashcard::query()
+            ->when($request->filled('deck_id'), fn ($q) =>
+                $q->where('deck_id', $request->deck_id)
+            )
+            ->orderBy('created_at')
+            ->paginate(
+                min($request->get('per_page', 5), 20)
+            );
     }
-
     /**
      * POST /flashcards
      */
