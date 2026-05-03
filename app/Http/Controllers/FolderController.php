@@ -4,24 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Models\Folder;
 use App\Http\Requests\StoreFolderRequest;
+use App\Http\Resources\FolderResource;
 
 class FolderController extends Controller
 {
     public function index()
     {
-        return Folder::latest()->get();
+        return FolderResource::collection(Folder::latest()->get());
     }
 
     public function store(StoreFolderRequest $request)
     {
         $folder = Folder::create($request->validated());
 
-        return response()->json($folder, 201);
+        return new FolderResource($folder);
     }
 
     public function show($id)
     {
-        return Folder::with('decks')->findOrFail($id);
+        $folder = Folder::with('decks')->findOrFail($id);
+
+        return new FolderResource($folder);
     }
 
     public function update(StoreFolderRequest $request, $id)
@@ -29,7 +32,7 @@ class FolderController extends Controller
         $folder = Folder::findOrFail($id);
         $folder->update($request->validated());
 
-        return response()->json($folder);
+        return new FolderResource($folder);
     }
 
     public function destroy($id)

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Language;
 use App\Http\Requests\LanguageRequest;
+use App\Http\Resources\LanguageResource;
 
 class LanguageController extends Controller
 {
@@ -12,10 +13,7 @@ class LanguageController extends Controller
      */
     public function index()
     {
-        return response()->json(
-            Language::all(),
-            200
-        );
+        return LanguageResource::collection(Language::all());
     }
 
     /**
@@ -25,7 +23,7 @@ class LanguageController extends Controller
     {
         $language = Language::create($request->validated());
 
-        return response()->json($language, 201);
+        return new LanguageResource($language);
     }
 
     /**
@@ -33,7 +31,7 @@ class LanguageController extends Controller
      */
     public function show(Language $language)
     {
-        return response()->json($language, 200);
+        return new LanguageResource($language);
     }
 
     /**
@@ -43,7 +41,7 @@ class LanguageController extends Controller
     {
         $language->update($request->validated());
 
-        return response()->json($language, 200);
+        return new LanguageResource($language);
     }
 
     /**
@@ -53,8 +51,6 @@ class LanguageController extends Controller
     {
         $language->delete();
 
-        return response()->json([
-            'message' => 'Language deleted'
-        ], 200);
+        return response()->noContent();
     }
 }

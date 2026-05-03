@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Deck;
 use App\Http\Requests\DeckRequest;
+use App\Http\Resources\DeckResource;
 
 class DeckController extends Controller
 {
@@ -12,7 +13,7 @@ class DeckController extends Controller
      */
     public function index()
     {
-        return response()->json(Deck::all(), 200);
+        return DeckResource::collection(Deck::all());
     }
 
     /**
@@ -22,7 +23,7 @@ class DeckController extends Controller
     {
         $deck = Deck::create($request->validated());
 
-        return response()->json($deck, 201);
+        return new DeckResource($deck);
     }
 
     /**
@@ -30,7 +31,7 @@ class DeckController extends Controller
      */
     public function show(Deck $deck)
     {
-        return response()->json($deck, 200);
+        return new DeckResource($deck);
     }
 
     /**
@@ -40,7 +41,7 @@ class DeckController extends Controller
     {
         $deck->update($request->validated());
 
-        return response()->json($deck, 200);
+        return new DeckResource($deck);
     }
 
     /**
@@ -50,6 +51,6 @@ class DeckController extends Controller
     {
         $deck->delete();
 
-        return response()->json(['message' => 'Deck deleted'], 200);
+        return response()->noContent();
     }
 }

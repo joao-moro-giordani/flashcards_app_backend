@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Flashcard;
 use App\Http\Requests\FlashcardRequest;
+use App\Http\Resources\FlashcardResource;
 
 class FlashcardController extends Controller
 {
@@ -12,7 +13,7 @@ class FlashcardController extends Controller
      */
     public function index(Request $request)
     {
-        return Flashcard::query()
+        $flashcards = Flashcard::query()
             ->when($request->filled('deck_id'), fn ($q) =>
                 $q->where('deck_id', $request->deck_id)
             )
@@ -20,6 +21,8 @@ class FlashcardController extends Controller
             ->paginate(
                 min($request->get('per_page', 5), 20)
             );
+
+        return FlashcardResource::collection($flashcards);
     }
     /**
      * POST /flashcards
@@ -28,7 +31,7 @@ class FlashcardController extends Controller
     {
         $flashcard = Flashcard::create($request->validated());
 
-        return response()->json($flashcard, 201);
+        return new FlashcardResource($flashcard);
     }
 
     /**
@@ -36,7 +39,7 @@ class FlashcardController extends Controller
      */
     public function show(Flashcard $flashcard)
     {
-        return response()->json($flashcard, 200);
+        return new FlashcardResource($flashcard);
     }
 
     /**
@@ -46,7 +49,7 @@ class FlashcardController extends Controller
     {
         $flashcard->update($request->validated());
 
-        return response()->json($flashcard, 200);
+        return new FlashcardResource($flashcard);
     }
 
     /**
@@ -56,6 +59,6 @@ class FlashcardController extends Controller
     {
         $flashcard->delete();
 
-        return response()->json(['message' => 'Flashcard deleted'], 200);
+        return response()->noContent();
     }
 }
